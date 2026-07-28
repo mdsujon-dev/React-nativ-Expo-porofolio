@@ -69,6 +69,7 @@ export function ContactSection() {
               value={name}
               onChangeText={update(setName)}
               mode="outlined"
+              outlineStyle={{ borderRadius: 12 }}
               left={<TextInput.Icon icon="account" />}
             />
 
@@ -78,6 +79,7 @@ export function ContactSection() {
                 value={email}
                 onChangeText={update(setEmail)}
                 mode="outlined"
+                outlineStyle={{ borderRadius: 12 }}
                 keyboardType="email-address"
                 autoCapitalize="none"
                 autoComplete="email"
@@ -94,6 +96,7 @@ export function ContactSection() {
               value={message}
               onChangeText={update(setMessage)}
               mode="outlined"
+              outlineStyle={{ borderRadius: 12 }}
               multiline
               numberOfLines={4}
               style={{ minHeight: 110 }}

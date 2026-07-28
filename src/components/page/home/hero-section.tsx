@@ -17,7 +17,7 @@ export function HeroSection({ onHire, onViewWork }: HeroSectionProps) {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={{ borderBottomLeftRadius: 32, borderBottomRightRadius: 32 }}>
-      <View className="items-center px-6 pb-10 pt-8">
+      <View className="items-center px-6 pb-10 pt-[52px]">
         <Text
           variant="displaySmall"
           style={{ color: '#fff', fontWeight: '900', textAlign: 'center' }}>
