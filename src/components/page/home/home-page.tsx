@@ -52,7 +52,7 @@ export function HomePage() {
         <View onLayout={captureOffset('Contact')}>
           <ContactSection />
         </View>
-        <Footer />
+        <Footer onNavigate={scrollToSection} />
       </ScrollView>
       <SideDrawer
         visible={menuOpen}
