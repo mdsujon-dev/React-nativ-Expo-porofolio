@@ -12,13 +12,21 @@ export type ProjectTechnologies = {
 export type Project = {
   _id: string;
   title: string;
+  slug?: string;
   category: string;
   thumbnail: string;
   shortDescription: string;
+  longDescription?: string;
+  features?: string[];
   technologies?: ProjectTechnologies;
   tags?: string[];
   liveUrl?: string;
   githubUrl?: string;
+  challenges?: string;
+  solutions?: string;
+  duration?: string;
+  role?: string;
+  gallery?: string[];
 };
 
 /** Flatten the tags to show on a project card. */
@@ -41,5 +49,19 @@ export function useProjects() {
   return useQuery({
     queryKey: ['projects'],
     queryFn: () => apiGet<Project[]>('/projects'),
+  });
+}
+
+/**
+ * A single project for the details page. The list endpoint already returns full
+ * documents, so we reuse the cached `projects` query and pick by id — no extra
+ * request when arriving from the projects section.
+ */
+export function useProject(id?: string) {
+  return useQuery({
+    queryKey: ['projects'],
+    queryFn: () => apiGet<Project[]>('/projects'),
+    select: (data) => data.find((p) => p._id === id || p.slug === id),
+    enabled: !!id,
   });
 }

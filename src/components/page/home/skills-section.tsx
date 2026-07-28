@@ -1,60 +1,56 @@
-import { View } from 'react-native';
-import { Avatar, Card, Chip, Text } from 'react-native-paper';
+import { LinearGradient } from 'expo-linear-gradient';
+import { StyleSheet, View } from 'react-native';
+import { Avatar, Chip, Text, useTheme } from 'react-native-paper';
 
+import { useSkills } from '@/api/dynamic-content';
 import { SectionHeader } from '@/components/shared';
+import { glassStyle } from '@/constants/glass';
 
-const SKILL_GROUPS: { title: string; icon: string; skills: string[] }[] = [
-  {
-    title: 'Frontend',
-    icon: 'cellphone',
-    skills: ['React Native', 'React', 'Next.js', 'Expo', 'NativeWind', 'TypeScript'],
-  },
-  {
-    title: 'Backend',
-    icon: 'server',
-    skills: ['Node.js', 'Express', 'REST APIs', 'GraphQL', 'PostgreSQL', 'MongoDB'],
-  },
-  {
-    title: 'Tools',
-    icon: 'tools',
-    skills: ['Git', 'GitHub', 'VS Code', 'Figma', 'EAS', 'Docker'],
-  },
-  {
-    title: 'Soft Skills',
-    icon: 'account-heart',
-    skills: ['Communication', 'Teamwork', 'Problem Solving', 'Adaptability'],
-  },
-];
-
-/** Skills grouped into categories, each in a Material card. */
+/** Skills grouped into categories, each in a frosted-glass card (backend-driven). */
 export function SkillsSection() {
+  const theme = useTheme();
+  const { content } = useSkills();
+  const glass = glassStyle(theme.dark);
+  const chipBg = theme.dark ? 'rgba(255,255,255,0.10)' : 'rgba(255,255,255,0.55)';
+
   return (
     <View className="px-5">
-      <SectionHeader
-        label="Technical Skills & Expertise"
-        title="Core Technologies & Proficiencies"
-        subtitle="The tools and technologies I use to bring ideas to life"
-      />
+      <SectionHeader label={content.label} title={content.title} subtitle={content.subtitle} />
 
       <View className="gap-3">
-        {SKILL_GROUPS.map((group) => (
-          <Card key={group.title} mode="elevated">
-            <Card.Content>
+        {content.groups.map((group) => (
+          <View key={group.key} style={glass.container}>
+            <LinearGradient
+              colors={glass.sheen}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+              style={StyleSheet.absoluteFill}
+            />
+            <View style={{ padding: 16 }}>
               <View className="mb-3 flex-row items-center gap-3">
-                <Avatar.Icon size={34} icon={group.icon} />
-                <Text variant="titleMedium" style={{ fontWeight: '700' }}>
+                <Avatar.Icon
+                  size={34}
+                  icon={group.icon}
+                  color="#fff"
+                  style={{ backgroundColor: theme.colors.primary }}
+                />
+                <Text variant="titleMedium" style={{ fontWeight: '800' }}>
                   {group.title}
                 </Text>
               </View>
               <View className="flex-row flex-wrap gap-2">
                 {group.skills.map((skill) => (
-                  <Chip key={skill} mode="flat" compact>
+                  <Chip
+                    key={skill}
+                    mode="flat"
+                    compact
+                    style={{ backgroundColor: chipBg }}>
                     {skill}
                   </Chip>
                 ))}
               </View>
-            </Card.Content>
-          </Card>
+            </View>
+          </View>
         ))}
       </View>
     </View>

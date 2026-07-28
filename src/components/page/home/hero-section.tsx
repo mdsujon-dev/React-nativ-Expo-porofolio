@@ -1,7 +1,8 @@
 import { LinearGradient } from 'expo-linear-gradient';
-import { View } from 'react-native';
+import { Linking, View } from 'react-native';
 import { Button, IconButton, Text } from 'react-native-paper';
 
+import { useHero } from '@/api/dynamic-content';
 import { BrandGradient } from '@/constants/palette';
 
 export type HeroSectionProps = {
@@ -9,8 +10,14 @@ export type HeroSectionProps = {
   onViewWork?: () => void;
 };
 
-/** Glossy green hero: greeting, tagline, CTA buttons and social icons. */
+const openLink = (url?: string) => {
+  if (url) Linking.openURL(url).catch(() => {});
+};
+
+/** Glossy green hero: greeting, tagline, CTA buttons and social icons (backend-driven). */
 export function HeroSection({ onHire, onViewWork }: HeroSectionProps) {
+  const { content } = useHero();
+
   return (
     <LinearGradient
       colors={BrandGradient}
@@ -21,37 +28,43 @@ export function HeroSection({ onHire, onViewWork }: HeroSectionProps) {
         <Text
           variant="displaySmall"
           style={{ color: '#fff', fontWeight: '900', textAlign: 'center' }}>
-          Hi, I&apos;m Sujon
+          {content.greeting}
         </Text>
         <Text
           variant="titleMedium"
           style={{ color: 'rgba(255,255,255,0.92)', marginTop: 8, textAlign: 'center' }}>
-          Full Stack Developer building fast, scalable web & mobile apps
+          {content.tagline}
         </Text>
 
         <View className="mt-6 flex-row gap-3">
           <Button
             mode="contained"
             buttonColor="#ffffff"
-            textColor="#059669"
-            icon="briefcase"
+            textColor="#065f46"
+            icon={content.primaryCta.icon}
             onPress={onHire}>
-            Hire Me
+            {content.primaryCta.text}
           </Button>
           <Button
             mode="outlined"
             textColor="#ffffff"
             style={{ borderColor: 'rgba(255,255,255,0.7)' }}
-            icon="folder-open"
-            onPress={onViewWork}>
-            View Work
+            icon={content.secondaryCta.icon}
+            onPress={content.secondaryCta.link ? () => openLink(content.secondaryCta.link) : onViewWork}>
+            {content.secondaryCta.text}
           </Button>
         </View>
 
-        <View className="mt-4 flex-row gap-1">
-          <IconButton icon="github" iconColor="#fff" size={24} onPress={() => {}} />
-          <IconButton icon="linkedin" iconColor="#fff" size={24} onPress={() => {}} />
-          <IconButton icon="email" iconColor="#fff" size={24} onPress={() => {}} />
+        <View className="mt-4 flex-row flex-wrap justify-center gap-1">
+          {content.socials.map((social) => (
+            <IconButton
+              key={social.key}
+              icon={social.icon}
+              iconColor="#fff"
+              size={24}
+              onPress={() => openLink(social.url)}
+            />
+          ))}
         </View>
       </View>
     </LinearGradient>

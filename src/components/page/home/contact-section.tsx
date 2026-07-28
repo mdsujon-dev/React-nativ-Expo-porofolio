@@ -1,15 +1,11 @@
 import { useState } from 'react';
 import { View } from 'react-native';
-import { Button, Card, HelperText, List, Text, TextInput } from 'react-native-paper';
+import { Button, Card, HelperText, List, Text, TextInput, useTheme } from 'react-native-paper';
 
 import { useSendMessage } from '@/api/contact';
+import { useContact } from '@/api/dynamic-content';
 import { SectionHeader } from '@/components/shared';
-
-const INFO: { icon: string; label: string; value: string }[] = [
-  { icon: 'email', label: 'Email', value: 'sujonthezoomit@gmail.com' },
-  { icon: 'github', label: 'GitHub', value: '@sujon-258549' },
-  { icon: 'map-marker', label: 'Location', value: 'Dhaka, Bangladesh' },
-];
+import { primaryShadow } from '@/constants/shadow';
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -17,12 +13,19 @@ const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 export function ContactSection() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
 
+  const theme = useTheme();
   const { mutate, isPending, isSuccess, isError, error, reset } = useSendMessage();
+  const { content } = useContact();
 
   const emailValid = EMAIL_REGEX.test(email);
-  const canSubmit = name.trim().length > 0 && emailValid && message.trim().length > 0;
+  const canSubmit =
+    name.trim().length > 0 &&
+    emailValid &&
+    subject.trim().length > 0 &&
+    message.trim().length > 0;
 
   const update = (setter: (value: string) => void) => (value: string) => {
     setter(value);
@@ -32,11 +35,17 @@ export function ContactSection() {
   const handleSubmit = () => {
     if (!canSubmit || isPending) return;
     mutate(
-      { name: name.trim(), email: email.trim(), message: message.trim() },
+      {
+        name: name.trim(),
+        email: email.trim(),
+        subject: subject.trim(),
+        message: message.trim(),
+      },
       {
         onSuccess: () => {
           setName('');
           setEmail('');
+          setSubject('');
           setMessage('');
         },
       }
@@ -45,16 +54,12 @@ export function ContactSection() {
 
   return (
     <View className="px-5">
-      <SectionHeader
-        label="Get In Touch"
-        title="Let's Work Together"
-        subtitle="Have a project in mind? Send me a message and let's build it"
-      />
+      <SectionHeader label={content.label} title={content.title} subtitle={content.subtitle} />
 
-      <Card mode="elevated">
-        {INFO.map((item) => (
+      <Card mode="elevated" style={primaryShadow(theme.colors.primary)}>
+        {content.info.map((item) => (
           <List.Item
-            key={item.label}
+            key={item.key}
             title={item.value}
             description={item.label}
             titleStyle={{ fontWeight: '700' }}
@@ -65,7 +70,7 @@ export function ContactSection() {
         ))}
       </Card>
 
-      <Card mode="elevated" style={{ marginTop: 16 }}>
+      <Card mode="elevated" style={{ marginTop: 16, ...primaryShadow(theme.colors.primary) }}>
         <Card.Content>
           <View className="gap-3 py-1">
             <Text variant="titleMedium" style={{ fontWeight: '700' }}>
@@ -98,6 +103,15 @@ export function ContactSection() {
                 Please enter a valid email address
               </HelperText>
             </View>
+
+            <TextInput
+              label="Subject"
+              value={subject}
+              onChangeText={update(setSubject)}
+              mode="outlined"
+              outlineStyle={{ borderRadius: 12 }}
+              left={<TextInput.Icon icon="format-title" />}
+            />
 
             <TextInput
               label="Message"
