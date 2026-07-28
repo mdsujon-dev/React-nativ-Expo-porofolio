@@ -1,31 +1,31 @@
 import { MD3DarkTheme, MD3LightTheme, type MD3Theme } from 'react-native-paper';
 
-/** Material 3 light theme with a purple brand primary. */
+/** Material 3 light theme with a deep green brand primary. */
 export const PaperLightTheme: MD3Theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#7c3aed',
+    primary: '#047857',
     onPrimary: '#ffffff',
-    primaryContainer: '#ede9fe',
-    onPrimaryContainer: '#4c1d95',
-    secondary: '#8b5cf6',
-    secondaryContainer: '#ddd6fe',
-    onSecondaryContainer: '#4c1d95',
+    primaryContainer: '#d1fae5',
+    onPrimaryContainer: '#064e3b',
+    secondary: '#059669',
+    secondaryContainer: '#a7f3d0',
+    onSecondaryContainer: '#064e3b',
   },
 };
 
-/** Material 3 dark theme with a lighter purple primary for contrast. */
+/** Material 3 dark theme with a brighter green primary for contrast. */
 export const PaperDarkTheme: MD3Theme = {
   ...MD3DarkTheme,
   colors: {
     ...MD3DarkTheme.colors,
-    primary: '#a78bfa',
-    onPrimary: '#2e1065',
-    primaryContainer: '#5b21b6',
-    onPrimaryContainer: '#ede9fe',
-    secondary: '#c4b5fd',
-    secondaryContainer: '#4c1d95',
-    onSecondaryContainer: '#ede9fe',
+    primary: '#34d399',
+    onPrimary: '#022c22',
+    primaryContainer: '#065f46',
+    onPrimaryContainer: '#d1fae5',
+    secondary: '#6ee7b7',
+    secondaryContainer: '#064e3b',
+    onSecondaryContainer: '#d1fae5',
   },
 };

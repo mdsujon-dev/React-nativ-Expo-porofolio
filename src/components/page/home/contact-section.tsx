@@ -2,15 +2,17 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Card, HelperText, List, Text, TextInput } from 'react-native-paper';
 
-const CONTACTS = [
-  { icon: 'github', label: 'GitHub', value: '@sujon-258549' },
-  { icon: 'linkedin', label: 'LinkedIn', value: '/in/sujon' },
+import { SectionHeader } from '@/components/shared';
+
+const INFO: { icon: string; label: string; value: string }[] = [
   { icon: 'email', label: 'Email', value: 'sujonthezoomit@gmail.com' },
+  { icon: 'github', label: 'GitHub', value: '@sujon-258549' },
+  { icon: 'map-marker', label: 'Location', value: 'Dhaka, Bangladesh' },
 ];
 
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-/** "Contact us" — quick links plus a Material contact form. */
+/** "Let's work together" — contact info plus a Material contact form. */
 export function ContactSection() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
@@ -35,18 +37,20 @@ export function ContactSection() {
 
   return (
     <View className="px-5">
-      <Text variant="titleLarge" style={{ fontWeight: '800', marginBottom: 12 }}>
-        Contact Us
-      </Text>
+      <SectionHeader
+        label="Get In Touch"
+        title="Let's Work Together"
+        subtitle="Have a project in mind? Send me a message and let's build it"
+      />
 
       <Card mode="elevated">
-        {CONTACTS.map((contact) => (
+        {INFO.map((item) => (
           <List.Item
-            key={contact.label}
-            title={contact.value}
-            description={contact.label}
+            key={item.label}
+            title={item.value}
+            description={item.label}
             titleStyle={{ fontWeight: '700' }}
-            left={(props) => <List.Icon {...props} icon={contact.icon} />}
+            left={(props) => <List.Icon {...props} icon={item.icon} />}
             right={(props) => <List.Icon {...props} icon="chevron-right" />}
             onPress={() => {}}
           />

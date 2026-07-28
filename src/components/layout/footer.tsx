@@ -1,40 +1,52 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import { Text, TouchableRipple } from 'react-native-paper';
+import { Divider, IconButton, Text } from 'react-native-paper';
 
-import { PurpleGradient } from '@/constants/palette';
+import { BrandColor } from '@/constants/palette';
 
-const LINKS = ['GitHub', 'LinkedIn', 'Email'];
+const SOCIALS: { icon: string; label: string }[] = [
+  { icon: 'github', label: 'GitHub' },
+  { icon: 'linkedin', label: 'LinkedIn' },
+  { icon: 'email', label: 'Email' },
+];
 
-/** Glossy purple footer that runs to the bottom edge of the screen. */
+/** Solid deep-green footer that runs to the bottom edge of the screen. */
 export function Footer() {
   const insets = useSafeAreaInsets();
   const year = new Date().getFullYear();
 
   return (
-    <LinearGradient
-      colors={PurpleGradient}
-      start={{ x: 0, y: 0 }}
-      end={{ x: 1, y: 1 }}
-      style={{ paddingBottom: insets.bottom + 20 }}>
-      <View className="items-center gap-4 px-6 pt-8">
+    <View style={{ backgroundColor: BrandColor, paddingBottom: insets.bottom + 20 }}>
+      <View className="items-center gap-3 px-6 pt-9">
         <Text variant="titleLarge" style={{ color: '#fff', fontWeight: '900' }}>
-          Sujon
+          Sujon.dev
         </Text>
 
-        <View className="flex-row flex-wrap justify-center gap-6">
-          {LINKS.map((link) => (
-            <TouchableRipple key={link} onPress={() => {}} borderless>
-              <Text style={{ color: 'rgba(255,255,255,0.9)', fontWeight: '600' }}>{link}</Text>
-            </TouchableRipple>
+        <Text variant="bodySmall" style={{ color: 'rgba(255,255,255,0.8)', textAlign: 'center' }}>
+          Full Stack Developer — let&apos;s build something great together.
+        </Text>
+
+        <View className="flex-row gap-2">
+          {SOCIALS.map((social) => (
+            <IconButton
+              key={social.label}
+              icon={social.icon}
+              iconColor="#ffffff"
+              size={22}
+              mode="contained-tonal"
+              containerColor="rgba(255,255,255,0.15)"
+              accessibilityLabel={social.label}
+              onPress={() => {}}
+            />
           ))}
         </View>
+
+        <Divider style={{ backgroundColor: 'rgba(255,255,255,0.2)', alignSelf: 'stretch' }} />
 
         <Text variant="bodySmall" style={{ color: 'rgba(255,255,255,0.7)' }}>
           {`© ${year} Sujon. All rights reserved.`}
         </Text>
       </View>
-    </LinearGradient>
+    </View>
   );
 }

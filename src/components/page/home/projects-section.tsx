@@ -2,7 +2,8 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { Linking, View } from 'react-native';
 import { Avatar, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
-import { PurpleGradient } from '@/constants/palette';
+import { BrandGradient } from '@/constants/palette';
+import { SectionHeader } from '@/components/shared';
 
 const PROJECTS: {
   title: string;
@@ -55,15 +56,17 @@ export function ProjectsSection() {
 
   return (
     <View className="px-5">
-      <Text variant="titleLarge" style={{ fontWeight: '800', marginBottom: 12 }}>
-        Projects
-      </Text>
+      <SectionHeader
+        label="My Creative Works"
+        title="Featured Projects"
+        subtitle="A selection of things I've designed and built"
+      />
 
       <View className="gap-4">
         {PROJECTS.map((project) => (
           <Card key={project.title} mode="elevated" style={{ overflow: 'hidden' }}>
             <LinearGradient
-              colors={PurpleGradient}
+              colors={BrandGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={{ height: 140, alignItems: 'center', justifyContent: 'center' }}>

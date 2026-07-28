@@ -1,31 +1,28 @@
 import { View } from 'react-native';
 import { Avatar, Card, Chip, Text } from 'react-native-paper';
 
+import { SectionHeader } from '@/components/shared';
+
 const SKILL_GROUPS: { title: string; icon: string; skills: string[] }[] = [
   {
     title: 'Frontend',
     icon: 'cellphone',
-    skills: ['React Native', 'React', 'Expo', 'NativeWind', 'TypeScript'],
+    skills: ['React Native', 'React', 'Next.js', 'Expo', 'NativeWind', 'TypeScript'],
   },
   {
     title: 'Backend',
     icon: 'server',
-    skills: ['Node.js', 'Express', 'REST APIs', 'GraphQL', 'PostgreSQL'],
+    skills: ['Node.js', 'Express', 'REST APIs', 'GraphQL', 'PostgreSQL', 'MongoDB'],
   },
   {
     title: 'Tools',
     icon: 'tools',
-    skills: ['Git', 'GitHub', 'VS Code', 'Figma', 'EAS'],
+    skills: ['Git', 'GitHub', 'VS Code', 'Figma', 'EAS', 'Docker'],
   },
   {
     title: 'Soft Skills',
     icon: 'account-heart',
     skills: ['Communication', 'Teamwork', 'Problem Solving', 'Adaptability'],
-  },
-  {
-    title: 'Other',
-    icon: 'dots-horizontal',
-    skills: ['Reanimated', 'CI / CD', 'Jest', 'Agile'],
   },
 ];
 
@@ -33,9 +30,11 @@ const SKILL_GROUPS: { title: string; icon: string; skills: string[] }[] = [
 export function SkillsSection() {
   return (
     <View className="px-5">
-      <Text variant="titleLarge" style={{ fontWeight: '800', marginBottom: 12 }}>
-        Skills
-      </Text>
+      <SectionHeader
+        label="Technical Skills & Expertise"
+        title="Core Technologies & Proficiencies"
+        subtitle="The tools and technologies I use to bring ideas to life"
+      />
 
       <View className="gap-3">
         {SKILL_GROUPS.map((group) => (

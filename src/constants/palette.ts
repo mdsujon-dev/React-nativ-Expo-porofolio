@@ -1,5 +1,5 @@
-/** Primary brand purple — used across navbar, footer, drawer and accents. */
-export const BrandPurple = '#7c3aed';
+/** Primary brand green (deep) — matches the Sujon.dev logo. Solid navbar/footer. */
+export const BrandColor = '#047857';
 
-/** Glossy purple gradient used for hero, navbar, footer and cards. */
-export const PurpleGradient = ['#8b5cf6', '#7c3aed', '#6d28d9'] as const;
+/** Deep green gradient used for the hero and project accents. */
+export const BrandGradient = ['#059669', '#047857', '#065f46'] as const;

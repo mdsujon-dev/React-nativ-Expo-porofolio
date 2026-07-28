@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react';
 import { Animated, Dimensions, Modal, Pressable, StyleSheet, View } from 'react-native';
 import { Divider, Drawer, Icon, IconButton, Surface, Switch, Text } from 'react-native-paper';
 
-import { PurpleGradient } from '@/constants/palette';
+import { BrandGradient } from '@/constants/palette';
 import { useThemePreference } from '@/context/theme-provider';
 
 const PANEL_WIDTH = Math.min(320, Dimensions.get('window').width * 0.82);
@@ -12,8 +12,8 @@ const ITEMS: { label: string; icon: string }[] = [
   { label: 'Home', icon: 'home' },
   { label: 'About', icon: 'account' },
   { label: 'Skills', icon: 'star' },
-  { label: 'Experience', icon: 'briefcase' },
   { label: 'Projects', icon: 'folder' },
+  { label: 'Experience', icon: 'briefcase' },
   { label: 'Contact', icon: 'email' },
 ];
 
@@ -69,7 +69,7 @@ export function SideDrawer({ visible, onClose, onNavigate }: SideDrawerProps) {
         <Animated.View style={[styles.panel, { transform: [{ translateX }] }]}>
           <Surface style={styles.panelInner} elevation={2}>
             <LinearGradient
-              colors={PurpleGradient}
+              colors={BrandGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 1 }}
               style={styles.header}>
@@ -99,13 +99,13 @@ export function SideDrawer({ visible, onClose, onNavigate }: SideDrawerProps) {
             <View style={styles.spacer} />
             <Divider />
 
-            <Pressable style={styles.themeRow} onPress={toggle}>
+            <View style={styles.themeRow}>
               <Icon source={isDark ? 'weather-night' : 'weather-sunny'} size={24} />
               <Text variant="bodyLarge" style={styles.themeText}>
                 {isDark ? 'Dark mode' : 'Light mode'}
               </Text>
               <Switch value={isDark} onValueChange={toggle} />
-            </Pressable>
+            </View>
           </Surface>
         </Animated.View>
       </View>
