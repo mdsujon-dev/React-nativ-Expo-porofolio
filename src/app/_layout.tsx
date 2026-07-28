@@ -2,12 +2,14 @@ import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { DarkTheme, DefaultTheme, ThemeProvider as NavThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { type ComponentProps } from 'react';
 import { PaperProvider } from 'react-native-paper';
 import 'react-native-reanimated';
 import '@/global.css';
 import { PaperDarkTheme, PaperLightTheme } from '@/constants/paper-theme';
 import { ThemeProvider, useThemePreference } from '@/context/theme-provider';
+import { queryClient } from '@/lib/query-client';
 
 type MCIName = ComponentProps<typeof MaterialCommunityIcons>['name'];
 
@@ -21,7 +23,9 @@ const paperSettings = {
 export default function RootLayout() {
   return (
     <ThemeProvider>
-      <RootNavigator />
+      <QueryClientProvider client={queryClient}>
+        <RootNavigator />
+      </QueryClientProvider>
     </ThemeProvider>
   );
 }

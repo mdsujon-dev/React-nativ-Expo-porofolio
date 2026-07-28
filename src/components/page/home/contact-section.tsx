@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { View } from 'react-native';
 import { Button, Card, HelperText, List, Text, TextInput } from 'react-native-paper';
 
+import { useSendMessage } from '@/api/contact';
 import { SectionHeader } from '@/components/shared';
 
 const INFO: { icon: string; label: string; value: string }[] = [
@@ -17,22 +18,29 @@ export function ContactSection() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-  const [sent, setSent] = useState(false);
+
+  const { mutate, isPending, isSuccess, isError, error, reset } = useSendMessage();
 
   const emailValid = EMAIL_REGEX.test(email);
   const canSubmit = name.trim().length > 0 && emailValid && message.trim().length > 0;
 
   const update = (setter: (value: string) => void) => (value: string) => {
     setter(value);
-    if (sent) setSent(false);
+    if (isSuccess || isError) reset();
   };
 
   const handleSubmit = () => {
-    if (!canSubmit) return;
-    setSent(true);
-    setName('');
-    setEmail('');
-    setMessage('');
+    if (!canSubmit || isPending) return;
+    mutate(
+      { name: name.trim(), email: email.trim(), message: message.trim() },
+      {
+        onSuccess: () => {
+          setName('');
+          setEmail('');
+          setMessage('');
+        },
+      }
+    );
   };
 
   return (
@@ -102,13 +110,23 @@ export function ContactSection() {
               style={{ minHeight: 110 }}
             />
 
-            <Button mode="contained" icon="send" onPress={handleSubmit} disabled={!canSubmit}>
+            <Button
+              mode="contained"
+              icon="send"
+              onPress={handleSubmit}
+              loading={isPending}
+              disabled={!canSubmit || isPending}>
               Send Message
             </Button>
 
-            {sent ? (
+            {isSuccess ? (
               <HelperText type="info" visible style={{ textAlign: 'center' }}>
                 ✅ Thanks! Your message has been sent.
+              </HelperText>
+            ) : null}
+            {isError ? (
+              <HelperText type="error" visible style={{ textAlign: 'center' }}>
+                {error instanceof Error ? error.message : 'Something went wrong. Please try again.'}
               </HelperText>
             ) : null}
           </View>

@@ -1,57 +1,16 @@
-import { LinearGradient } from 'expo-linear-gradient';
 import { Linking, View } from 'react-native';
-import { Avatar, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Button, Card, Chip, Icon, Text, useTheme } from 'react-native-paper';
 
-import { BrandGradient } from '@/constants/palette';
+import { projectTags, useProjects, type Project } from '@/api/projects';
 import { SectionHeader } from '@/components/shared';
 
-const PROJECTS: {
-  title: string;
-  category: string;
-  icon: string;
-  description: string;
-  tags: string[];
-  demoUrl: string;
-  codeUrl: string;
-}[] = [
-  {
-    title: 'MealBox Services',
-    category: 'Full Stack App',
-    icon: 'silverware-fork-knife',
-    description:
-      'A full-stack food delivery web app connecting customers with meal providers using Next.js, Node and MongoDB.',
-    tags: ['next js', 'node js', 'express', 'shadcn', 'tailwind', 'mongoose', 'mongodb', 'jwt', 'argon js'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/sujon-258549',
-  },
-  {
-    title: 'Mobile Commerce',
-    category: 'React Native App',
-    icon: 'cart',
-    description:
-      'A cross-platform shopping experience with cart, checkout, Stripe payments and push notifications.',
-    tags: ['react native', 'expo', 'stripe', 'reanimated', 'zustand'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/sujon-258549',
-  },
-  {
-    title: 'Task Manager',
-    category: 'Productivity App',
-    icon: 'check-circle',
-    description:
-      'An offline-first productivity app with local persistence, reminders and background sync.',
-    tags: ['react native', 'sqlite', 'expo', 'notifications'],
-    demoUrl: 'https://example.com',
-    codeUrl: 'https://github.com/sujon-258549',
-  },
-];
-
-/** Project cards: cover, category label, title, description, tags and actions. */
+/** Projects loaded live from the backend, with loading + error states. */
 export function ProjectsSection() {
   const theme = useTheme();
+  const { data: projects, isLoading, isError, error, refetch, isFetching } = useProjects();
 
-  const openUrl = (url: string) => {
-    Linking.openURL(url).catch(() => {});
+  const openUrl = (url?: string) => {
+    if (url) Linking.openURL(url).catch(() => {});
   };
 
   return (
@@ -62,21 +21,30 @@ export function ProjectsSection() {
         subtitle="A selection of things I've designed and built"
       />
 
+      {isLoading ? (
+        <View className="items-center py-10">
+          <ActivityIndicator />
+        </View>
+      ) : null}
+
+      {isError ? (
+        <Card mode="elevated">
+          <Card.Content style={{ alignItems: 'center', gap: 10, paddingVertical: 24 }}>
+            <Icon source="cloud-off-outline" size={32} color={theme.colors.error} />
+            <Text variant="bodyMedium" style={{ textAlign: 'center', opacity: 0.8 }}>
+              {error instanceof Error ? error.message : "Couldn't load projects"}
+            </Text>
+            <Button mode="contained-tonal" icon="refresh" loading={isFetching} onPress={() => refetch()}>
+              Retry
+            </Button>
+          </Card.Content>
+        </Card>
+      ) : null}
+
       <View className="gap-4">
-        {PROJECTS.map((project) => (
-          <Card key={project.title} mode="elevated" style={{ overflow: 'hidden' }}>
-            <LinearGradient
-              colors={BrandGradient}
-              start={{ x: 0, y: 0 }}
-              end={{ x: 1, y: 1 }}
-              style={{ height: 140, alignItems: 'center', justifyContent: 'center' }}>
-              <Avatar.Icon
-                size={56}
-                icon={project.icon}
-                color="#ffffff"
-                style={{ backgroundColor: 'rgba(255,255,255,0.2)' }}
-              />
-            </LinearGradient>
+        {projects?.map((project: Project) => (
+          <Card key={project._id} mode="elevated" style={{ overflow: 'hidden' }}>
+            <Card.Cover source={{ uri: project.thumbnail }} style={{ height: 160 }} />
 
             <Card.Content style={{ paddingTop: 16, gap: 8 }}>
               <View className="flex-row items-center gap-2">
@@ -84,19 +52,19 @@ export function ProjectsSection() {
                 <Text
                   variant="labelMedium"
                   style={{ color: theme.colors.primary, fontWeight: '800', letterSpacing: 1 }}>
-                  {project.category.toUpperCase()}
+                  {project.category?.toUpperCase()}
                 </Text>
               </View>
 
               <Text variant="titleLarge" style={{ fontWeight: '800' }}>
                 {project.title}
               </Text>
-              <Text variant="bodyMedium" style={{ opacity: 0.7 }}>
-                {project.description}
+              <Text variant="bodyMedium" numberOfLines={3} style={{ opacity: 0.7 }}>
+                {project.shortDescription}
               </Text>
 
               <View className="mt-1 flex-row flex-wrap gap-2">
-                {project.tags.map((tag) => (
+                {projectTags(project).map((tag) => (
                   <Chip key={tag} mode="flat" compact>
                     {tag}
                   </Chip>
@@ -108,14 +76,16 @@ export function ProjectsSection() {
               <Button
                 mode="contained"
                 icon="open-in-new"
-                onPress={() => openUrl(project.demoUrl)}
+                onPress={() => openUrl(project.liveUrl)}
+                disabled={!project.liveUrl}
                 style={{ flex: 1 }}>
                 Live Demo
               </Button>
               <Button
                 mode="contained-tonal"
                 icon="github"
-                onPress={() => openUrl(project.codeUrl)}
+                onPress={() => openUrl(project.githubUrl)}
+                disabled={!project.githubUrl}
                 style={{ flex: 1 }}>
                 View Code
               </Button>
