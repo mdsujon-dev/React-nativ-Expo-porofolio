@@ -5,11 +5,11 @@ export const PaperLightTheme: MD3Theme = {
   ...MD3LightTheme,
   colors: {
     ...MD3LightTheme.colors,
-    primary: '#047857',
+    primary: '#065f46',
     onPrimary: '#ffffff',
     primaryContainer: '#d1fae5',
     onPrimaryContainer: '#064e3b',
-    secondary: '#059669',
+    secondary: '#047857',
     secondaryContainer: '#a7f3d0',
     onSecondaryContainer: '#064e3b',
   },

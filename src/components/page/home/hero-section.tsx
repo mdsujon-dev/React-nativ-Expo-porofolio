@@ -17,16 +17,10 @@ export function HeroSection({ onHire, onViewWork }: HeroSectionProps) {
       start={{ x: 0, y: 0 }}
       end={{ x: 1, y: 1 }}
       style={{ borderBottomLeftRadius: 32, borderBottomRightRadius: 32 }}>
-      <View className="items-center px-6 pb-10 pt-6">
-        <View className="rounded-full bg-white/20 px-4 py-1.5">
-          <Text variant="labelMedium" style={{ color: '#fff', fontWeight: '800', letterSpacing: 1 }}>
-            WELCOME TO MY PORTFOLIO
-          </Text>
-        </View>
-
+      <View className="items-center px-6 pb-10 pt-8">
         <Text
           variant="displaySmall"
-          style={{ color: '#fff', fontWeight: '900', marginTop: 16, textAlign: 'center' }}>
+          style={{ color: '#fff', fontWeight: '900', textAlign: 'center' }}>
           Hi, I&apos;m Sujon
         </Text>
         <Text
