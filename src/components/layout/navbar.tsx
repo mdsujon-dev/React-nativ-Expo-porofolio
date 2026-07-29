@@ -5,7 +5,7 @@ import { Appbar } from 'react-native-paper';
 
 import { BrandColor } from '@/constants/palette';
 
-const logo = require('@/assets/logo/logo.png');
+const logo = require('@/assets/logo/logo.webp');
 
 export type NavbarProps = {
   title?: string;
